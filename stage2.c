@@ -30,9 +30,9 @@ void seq2();
 
 //********** Global variables definition  ***********
 
-const int time=50;
-const int n = 8; // number of led/bits
-const int k = 25; // to count in step by step
+const char time=50;
+const char n = 8; // number of led/bits
+const char k = 25; // to count in step by step
 //*************** Main Program **********************
 int main(void)
 {
