@@ -1,6 +1,6 @@
 /***********************************************************
-*  Program to create a 8-led sequence 
-*  This sequence consists in a counting from 0 to 255
+*  Program to create 10 8-led sequence 
+*  This sequence consists in a counting from 0 to 255 twenty-five by twenty-five
 *  Micro: Atmega328P
 *  Date: 17-02-2022
 ************************************************************/
@@ -20,7 +20,7 @@
 
 //********** Global variables definition  ***********
 
-const int time=1000;
+const int time=50;
 const int n = 8; // number of led/bits
 
 //*************** Main Program **********************
@@ -33,14 +33,16 @@ int main(void)
 
   DDRD |= 0xFF;
 
-  while(true) // endless loop
+  while(1) // endless loop
   {
     PORTD = 0xFF;
-    for (int i = 0; i < pow(2.0,n); i++)
-    {
-      PORTD = i;
-      _delay_ms(time);//1seg delay
-    }
+	int i = 5;
+	while (i < pow(2.0,n))
+	{
+		PORTD = i;
+		_delay_ms(time);//1seg delay
+		i = i + 25;
+	}
   }
   return 0;
 }//** End of Program
