@@ -1,7 +1,7 @@
 /***********************************************************
 *  Program to alternate between twos 8-led sequences 
 *  These sequences consist in some terms of Fibonacci sequence (sequence 1)
-*  and a counting from 0 to 255 (sequence 2)
+*  and a counting from 0 to 255 (sequence 2) k by k
 *  Micro: Atmega328P
 *  Date: 24-02-2022
 ************************************************************/
@@ -32,7 +32,7 @@ void seq2();
 
 const int time=50;
 const int n = 8; // number of led/bits
-
+const int k = 25; // to count in step by step
 //*************** Main Program **********************
 int main(void)
 {
@@ -70,8 +70,8 @@ int main(void)
 }//** End of Program
 
 void seq1(){
-	int FibTerms[14] ={0,1,1,2,3,5,8,13,21,34,55,89,144,233};
-	for (int i = 0; i < 14; i++)
+	int FibTerms[10] ={3,5,8,13,21,34,55,89,144,233};
+	for (int i = 0; i < 10; i++)
 	{
 	 // if button is pressed while sequence is running, then stop to return to main loop and check the state of alt
 		if (pulsador0) 
@@ -86,7 +86,7 @@ void seq1(){
 	}	
 }
 void seq2(){
-	for (int i = 0; i < pow(2.0,n); i++)
+	for (int i = 5; i < pow(2.0,n); i= i + k)
 	{
 		if (pulsador0)
 		{
@@ -95,8 +95,9 @@ void seq2(){
 		else
 		{
 			PORTD = i;
-			_delay_ms(time);
+			_delay_ms(time*2);
 		}
 	}
 }
+
 
