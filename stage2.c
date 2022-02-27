@@ -45,7 +45,7 @@ int main(void)
 
   DDRD |= 0xFF;
   DDRC |= 0x00;
-  char alt = 0; // variable to alternate the sequence, or equivantly to identify it (0 = sequence 1, 1 = sequence 2)
+  char alt = 0; // variable to alternate the sequence, or equivalently to identify it (0 = sequence 1, 1 = sequence 2)
   
   while(1) // endless loop
   {
