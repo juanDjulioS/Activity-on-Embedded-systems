@@ -47,26 +47,11 @@ int main(void)
   DDRC |= 0x00;
   char alt = 0; // variable to alternate the sequence, or equivalently to identify it (0 = sequence 1, 1 = sequence 2)
   
-  while(1) // endless loop
-  {
+  while(1){ // endless loop
 	  PORTC = 0x00;
 	  PORTD = 0x00;
-	  if(pulsador0 && alt==0) // If button has been press and check the previous state of alt
-	  {
-		  alt = 1;
-	  }
-	  if (alt == 0)
-	  {
-		  seq1();
-	  } 
-	  else
-	  {
-		  seq2();
-		  if (pulsador0 && alt ==1)
-		  {
-			  alt = 0;
-		  }
-	  }
+	  alt = pulsador0?1:0;
+	  !alt? seq1() : (pulsador0? alt=0 :seq2());
   }
   return 0;
 }//** End of Program
