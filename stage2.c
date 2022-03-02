@@ -1,7 +1,6 @@
 /***********************************************************
-*  Program to alternate between twos 8-led sequences 
-*  These sequences consist in some terms of Fibonacci sequence (sequence 1)
-*  and a counting from 0 to 255 (sequence 2) k by k
+*  Program to alternate between two 8-led sequences when a
+*  button is pressed
 *  Micro: Atmega328P
 *  Date: 24-02-2022
 ************************************************************/
@@ -19,7 +18,6 @@
 void seq1();
 void seq2();
 
-
 /************************************************************** 
  *  Pin-reading definition through a macro #define
  *  PD2 depict pin D2
@@ -30,9 +28,8 @@ void seq2();
 
 //********** Global variables definition  ***********
 
-const char time=50;
-const char n = 8; // number of led/bits
-const char k = 25; // to count in step by step
+const short time=50;
+const short n = 10; // number of sequences
 //*************** Main Program **********************
 int main(void)
 {
@@ -40,64 +37,65 @@ int main(void)
   //**********Ports Setting **********************
   //Port D as output
   //0xFF = 0b11111111
-  //PORT C as input
-  // 0b00000000 = 0x00 
+  //PORT C5 as input
+  // 0b11011111 = 0xDF 
 
   DDRD |= 0xFF;
-  DDRC |= 0x00;
-  char alt = 0;     									// variable to alternate the sequence, or equivalently to identify it (0 = sequence 1, 1 = sequence 2)
+  DDRC |= 0xDF;
+  // variable to alternate the sequence, or equivalently to 
+  // identify it (0 = sequence 1, 1 = sequence 2)
+  char alt = 0;									
   
   while(1){ // endless loop
-	  PORTC = 0x00;
+	  PORTC = 0xFF;
 	  PORTD = 0x00;
-	  if (pulsador0)
-	  {
+	  // if button is pressed,toggle alt
+	  if (pulsador0){
 		  alt = 1;
-	  }
-													// if button is pressed,toggle alt
-	  if (alt == 0) seq1();							// if alt = 0 run sequence 1 but, check out if button has been pressed again
-	  if (alt == 1)
-	  {												//to turn alt again to zero, if that's not the case, run sequence 2
-		  seq2();
-		  if (pulsador0)
-		  {
-			  alt = 0;
-		  }
-	  }
-  }
+	  }					
+												
+	  // if alt = 0 run sequence 1
+	  if (alt == 0) seq1();					
 	  
+	  // if alt = 1 run sequence 2 and then check out if button 
+	  // has been pressed again, in that case turn alt to zero.
+	  if (alt == 1){									
+		  seq2();
+		  	if (pulsador0){
+			  	alt = 0;
+		  	}
+	  }
+
+  }	  
   return 0;
 }//** End of Program
 
 void seq1(){
-	int FibTerms[10] ={3,5,8,13,21,34,55,89,144,233};
-	for (int i = 0; i < 10; i++)
+	int sequence1[] = {25,50,75,100,125,150,175,200,225,250};
+	for (int i = 0; i < n; i++)
 	{
-	 // if button is pressed while sequence is running, then stop to return to main loop and check the state of alt
-		if (pulsador0) 
-		{
+		// if button is pressed while sequence is running, 
+		// then stop and return to main loop to check the state of alt
+		if (pulsador0) {
 			break;
-		} 
-		else
-		{
-			PORTD = FibTerms[i];
-			_delay_ms(time); //delay of 'time' milliseconds
-		}
-	}	
-}
-void seq2(){
-	for (int i = 5; i < pow(2.0,n); i= i + k)
-	{
-		if (pulsador0)
-		{
-			break;
-		}
-		else
-		{
-			PORTD = i;
-			_delay_ms(time*2);
+			}
+		else {
+			PORTD = sequence1[i];
+			_delay_ms(2*time); //delay of 'time' milliseconds between sequences
 		}
 	}
 }
-
-
+void seq2(){
+	int sequence2[] ={3,5,8,13,21,34,55,89,144,233};
+	for (int i = 0; i < n; i++)
+	{
+	 
+		if (pulsador0){
+			break;
+		} 
+		else {
+			PORTD = sequence2[i];
+			_delay_ms(time);
+		}
+	}	
+}
