@@ -1,6 +1,5 @@
 /***********************************************************
-*  Program to create 10 8-led sequence 
-*  This sequence consists in a counting from 0 to 255 k by k
+*  Program to create 10 sequences with 8 leds
 *  Micro: Atmega328P
 *  Date: 17-02-2022
 ************************************************************/
@@ -19,28 +18,26 @@
 
 
 //********** Global variables definition  ***********
-
-const char time=50;
-const char n = 8; // number of led/bits
-const char k = 25;
+const char n = 10; // number of sequences
+const short time=50; // time to delay
 //*************** Main Program **********************
 int main(void)
 {
+	short sequence1[] = {5,15,45,75,105,135,165,195,225,255};
+	//**********Ports Setting **********************
+	//Port D as output
+	//0xFF = 0b11111111
 
-  //**********Ports Setting **********************
-  //Port D as output
-  //0xFF = 0b11111111
+	DDRD |= 0xFF;
 
-  DDRD |= 0xFF;
-
-  while(1) // endless loop
-  {
-    PORTD = 0xFF;
-    for (int i = 5; i < pow(2.0,n); i= i + k)
+	while(1) // endless loop
 	{
-		PORTD = i;
-		_delay_ms(time*2);
+		PORTD = 0x00;
+		for (short i = 0; i < n; i++)
+		{
+			PORTD = sequence1[i];
+			_delay_ms(time);
+		}
 	}
-  }
-  return 0;
+return 0;
 }//** End of Program
