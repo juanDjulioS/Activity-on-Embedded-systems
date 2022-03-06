@@ -15,8 +15,8 @@
 
 
 //*************** Functions and subroutines ******************
-void seq1();
-void seq2();
+void seq(int, int []);
+
 
 /************************************************************** 
 *  Pin-reading definition through a macro #define
@@ -29,8 +29,10 @@ void seq2();
 #define decrVel (PINC & (1<<PC2))>>PC2
 //********** Global variables definition  ***********
 
-const short time=50;
+const short time=300;
 const short n = 10; // number of sequences
+int sequence1[] = {103,205,307,409,511,612,714,816,918,1023};
+int sequence2[] ={13,21,34,55,89,144,233,377,610,987};
 //*************** Main Program **********************
 int main(void)
 {
@@ -46,8 +48,8 @@ int main(void)
 	DDRB |= 0xFF;
 	DDRC |= 0x00;
 	// variable to alternate the sequence, or equivalently to 
-	// identify it (0 = sequence 1, 1 = sequence 2)
-	char alt = 0;									
+	// identify it (1 = sequence 1, 2 = sequence 2)
+	char alt = 0;	// no sequence								
   
 	while(1){ // endless loop
 		PORTC = 0x00;
@@ -55,72 +57,40 @@ int main(void)
 		if (buttonSeq1){
 			_delay_ms(250); // wait for possible signal debouncing
 			alt = 1;
-		}					
-												
-		// if alt = 0 run sequence 1
-		if (alt == 0) seq1();					
-	  
-		// if alt = 1 run sequence 2 and then check out if button 
-		// has been pressed again, in that case turn alt to zero.
-		if (alt == 1){									
-			seq2();
-			if (buttonSeq1){
-				_delay_ms(250);
-				alt = 0;
-			}
 		}
+		if (buttonSeq2)
+		{
+			_delay_ms(250);
+			alt = 2;
+		}
+		if (alt == 1) seq(buttonSeq2,sequence1);
+		if (alt == 2) seq(buttonSeq1,sequence2);
 	}	  
 	return 0;
 }//** End of Program
 
-void seq1(){
-	int sequence1[] = {103,205,307,409,511,612,714,816,918,1023};
-	PORTD = 0x00;
-	PORTB = 0x00;
-	for (int i = 0; i < n; i++)
-	{
-		// if button is pressed while sequence is running,
-		// then stop and return to main loop to check the state of alt
-		if (buttonSeq1) {
-			break;
-		}
-		else {
-			if (i>1)
-			{
-				PORTD = sequence1[i] & 0xFF;
-				PORTB = sequence1[i] >> (n-2);
-				_delay_ms(time); //delay of 'time' milliseconds between sequences
-			} 
-			else
-			{
-				PORTD = sequence1[i];
-				_delay_ms(time);
-			}
-		}
-	}
-}
-void seq2(){
-	int sequence2[] ={13,21,34,55,89,144,233,377,610,987};
+void seq(int c, int vec[]){
 	PORTD = 0x00;
 	PORTB = 0x00;
 	for (int i = 0; i < n-2; i++)
 	{
 		
-		if (buttonSeq1){
+		if (c){
 			break;
 		}
 		else {
-			if (i>6)
+			if (vec[i]>256)
 			{
-				PORTD = sequence2[i] & 0xFF;
-				PORTB = sequence2[i] >> (n-2);
+				PORTD = vec[i] & 0xFF;
+				PORTB =vec[i] >> (n-2);
 				_delay_ms(time); //delay of 'time' milliseconds between sequences
 			}
 			else
 			{
-				PORTD = sequence2[i];
+				PORTD = vec[i];
 				_delay_ms(time);
 			}
 		}
 	}
+	
 }
