@@ -46,7 +46,7 @@ int main(void)
 	char alt = 0;									
   
 	while(1){ // endless loop
-		PORTD = 0x00;
+		PORTC = 0x00;
 		// if button is pressed,toggle alt
 		if (pulsador0){
 			_delay_ms(250); // wait for possible signal debouncing
