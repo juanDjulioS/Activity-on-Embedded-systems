@@ -24,7 +24,7 @@ void seq2();
 *  #define <nameMacro> (port & (1<<portPin))>>portPin
 ***************************************************************/
 
-#define pulsador0 (PINC & (1<<PC4))>>PC4
+#define pulsador0 (PINC & (1<<PC5))>>PC5
 
 //********** Global variables definition  ***********
 
