@@ -24,7 +24,7 @@ void seq2();
 *  #define <nameMacro> (port & (1<<portPin))>>portPin
 ***************************************************************/
 
-#define pulsador0 (PINC & (1<<PC5))>>PC5
+#define pulsador0 (PINC & (1<<PC4))>>PC4
 
 //********** Global variables definition  ***********
 
@@ -47,8 +47,6 @@ int main(void)
   
 	while(1){ // endless loop
 		PORTD = 0x00;
-		PORTC = 0x00;
-	  
 		// if button is pressed,toggle alt
 		if (pulsador0){
 			_delay_ms(250); // wait for possible signal debouncing
@@ -73,6 +71,7 @@ int main(void)
 
 void seq1(){
 	int sequence1[] = {25,50,75,100,125,150,175,200,225,250};
+	PORTD = 0x00;
 	for (int i = 0; i < n; i++)
 	{
 		// if button is pressed while sequence is running, 
@@ -88,6 +87,7 @@ void seq1(){
 }
 void seq2(){
 	int sequence2[] ={3,5,8,13,21,34,55,89,144,233};
+	PORTD = 0x00;
 	for (int i = 0; i < n; i++)
 	{
 		
@@ -100,4 +100,3 @@ void seq2(){
 		}
 	}
 }
-
