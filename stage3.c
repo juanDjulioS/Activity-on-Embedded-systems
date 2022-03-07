@@ -16,7 +16,8 @@
 
 //*************** Functions and subroutines ******************
 void seq(int, int []);
-
+void getPos();
+void delayms(int);
 
 /************************************************************** 
 *  Pin-reading definition through a macro #define
@@ -27,12 +28,14 @@ void seq(int, int []);
 #define buttonSeq2 (PINC & (1<<PC4))>>PC4
 #define incrVel (PINC & (1<<PC3))>>PC3
 #define decrVel (PINC & (1<<PC2))>>PC2
+
 //********** Global variables definition  ***********
 
-const short time=300;
 const short n = 10; // number of sequences
+int pos = 0;
 int sequence1[] = {103,205,307,409,511,612,714,816,918,1023};
 int sequence2[] ={13,21,34,55,89,144,233,377,610,987};
+int velocities[] = {50,100,200,700,1000};
 //*************** Main Program **********************
 int main(void)
 {
@@ -49,8 +52,9 @@ int main(void)
 	DDRC |= 0x00;
 	// variable to alternate the sequence, or equivalently to 
 	// identify it (1 = sequence 1, 2 = sequence 2)
-	char alt = 0;	// no sequence								
-  
+	char alt = 0;	// no sequence	
+	//********************************Change in velocity **********************
+				
 	while(1){ // endless loop
 		PORTC = 0x00;
 		// if button is pressed,toggle alt
@@ -62,7 +66,8 @@ int main(void)
 		{
 			_delay_ms(250);
 			alt = 2;
-		}
+		} 		
+//************************* execution of sequences *********************** 
 		if (alt == 1) seq(buttonSeq2,sequence1);
 		if (alt == 2) seq(buttonSeq1,sequence2);
 	}	  
@@ -79,18 +84,47 @@ void seq(int c, int vec[]){
 			break;
 		}
 		else {
+			if (incrVel || decrVel)
+			{
+				getPos();
+			}
 			if (vec[i]>256)
 			{
 				PORTD = vec[i] & 0xFF;
 				PORTB =vec[i] >> (n-2);
-				_delay_ms(time); //delay of 'time' milliseconds between sequences
+				delayms(velocities[pos]);
 			}
 			else
 			{
 				PORTD = vec[i];
-				_delay_ms(time);
+				delayms(velocities[pos]);
 			}
 		}
 	}
-	
 }
+void getPos(){
+	if (pos > 5)
+	{
+		pos = 0;
+	}
+	if (pos < 0)
+	{
+		pos = 5;
+	}
+	if (incrVel)
+	{
+		pos++;
+	}
+	if (decrVel)
+	{
+		pos--;
+	}
+}
+void delayms(int n){
+	// delayms(200) == 20 veces llamar _delay_ms(10)
+	for (int i = 0; i < (n/10); i++)
+	{
+		_delay_ms(10);
+	}
+}
+
