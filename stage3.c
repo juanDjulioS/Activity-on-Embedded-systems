@@ -35,7 +35,7 @@ const short n = 10; // number of sequences
 int pos = 0;
 int sequence1[] = {103,205,307,409,511,612,714,816,918,1023};
 int sequence2[] ={13,21,34,55,89,144,233,377,610,987};
-int velocities[] = {500,300,100,50,20};
+int velocities[] = {100,80,60,50,10};
 //*************** Main Program **********************
 int main(void)
 {
@@ -103,30 +103,27 @@ void seq(int c, int vec[]){
 	}
 }
 void getPos(){
-	if ( pos>= 0 && pos <=4 )
+	if ( pos>= 0 && pos <=4)
 	{
 		if (incrVel)
 		{
-			_delay_ms(250);
+			_delay_ms(25);
 			pos++;
 		}
-		if (decrVel)
+		else if (decrVel)
 		{
-			_delay_ms(250);
+			_delay_ms(25);
 			pos--;
 		}
-	} 
-	else
-	{
+	}else{
 		if (pos<0) pos = 0;
 		if (pos>4) pos = 4;
 	}
-	
 }
 void delayms(int n){
 	// delayms(200) == 20 veces llamar _delay_ms(10)
-	for (int i = 0; i < (n/10); i++)
+	for (int i = 0; i < n; i++)
 	{
-		_delay_ms(10);
+		_delay_ms(1);
 	}
 }
