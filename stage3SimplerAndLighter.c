@@ -2,7 +2,7 @@
 *  Program to alternate between 20 10-led sequences with two buttons,
 *  and to change between 10 velocities with two buttons
 *  Micro: Atmega328P
-*  Date: 24-02-2022
+*  Date: 8-03-2022
 ***********************************************************************/
 
 /***************************** Libraries ******************************/
@@ -22,10 +22,12 @@
 #define velDown (PINC & (1<<PC2))>>PC2
 
 /******************* Global Variables Definition **********************/
-short seqID;
-short velID;								   
-int velocities[] = {3000,100};
-short nVel = (&velocities)[1] - velocities;
+short seqID; 	// Sequence Identifier 
+short velID;	// Velocity Identifier					   
+int velocities[] = {3000,2000,1000,700,600,500,400,300,200,100};
+short nVel = (&velocities)[1] - velocities; //number of velocities
+
+// Array of 20 x 10 (20 sequences, with 10  different sparkles each one)
 int seqArray[][10] =
 {
 	{0},
@@ -50,7 +52,7 @@ int seqArray[][10] =
 	{30,161,232,330,431,517,529,544,672,713},
 	{13,21,34,55,89,144,233,377,610,987}				//20
 };												
-short nSeq = (&seqArray)[1] - seqArray;
+short nSeq = (&seqArray)[1] - seqArray; // Number of sequences
 /********************* Functions and subroutines **********************/	
 void indexSelector (short *x,short MAX, int UP, int DOWN){
 	/*
@@ -77,13 +79,19 @@ void setSeq(int vec[]){
 	PORTB = 0x00;
 	for (int i = 0;i<10; i++)
 	{
+		// if any button to change sequence is pressed, 
+		// end sequence execution (to check the new value of seqID)
 		if (seqUp || seqDown) break;
 		else
-		{
+		{	
+			// if any button to change velocity is pressed, 
+			// change value of velID according to the button
 			if (velUp || velDown) 
 			{
 				indexSelector(&velID,nVel,velUp,velDown);
 			}
+			// Assign i-th element of a sequence to ports D
+			// (first 8 LSB) and B (the MSB ones)
 			PORTD = vec[i] & 0xFF;
 			PORTB = vec[i] >> 8;
 			delayms(velocities[velID]);
@@ -94,7 +102,7 @@ void setSeq(int vec[]){
 /************************** Main Program ******************************/
 int main(void)
 {
-	//*************** variable initialization**************************/
+	/*************** variable initialization **************************/
 	seqID = 0;
 	velID = 0;
 	//*******************Ports Setting ********************************/
@@ -114,7 +122,7 @@ int main(void)
 	{
 		PORTC = 0x00;
 		indexSelector(&seqID,nSeq,seqUp,seqDown);
-		/******************** Execution of Sequences ******************/
+		/*********** Selection and Execution of Sequences **********/
 		switch(seqID)
 		{
 			case 0:		   	      break;
