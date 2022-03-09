@@ -117,7 +117,7 @@ int main(void)
 		/******************** Execution of Sequences ******************/
 		switch(seqID)
 		{
-			case 0:		   			      break;
+			case 0:		   	      break;
 			case 1:setSeq(seqArray[1]);   break;
 			case 2:setSeq(seqArray[2]);   break;
 			case 3:setSeq(seqArray[3]);   break;
