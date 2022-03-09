@@ -29,7 +29,7 @@ short nVel = (&velocities)[1] - velocities;
 int seqArray[][10] =
 {
 	{0},
-	{1,2,4,8,16,32,64,128,256,512},				        //1
+	{1,2,4,8,16,32,64,128,256,512},					//1
 	{512,256,128,64,32,16,8,4,2,1},
 	{1,2,0x204,0x109,0x92,0x124,0x242,0x81,0x100,0x200},											
 	{0x200,0x100,0x81,0x242,0x124,0x92,0x109,0x204,2,1},
@@ -63,8 +63,8 @@ void indexSelector (short *x,short MAX, int UP, int DOWN){
 	if ((*x) < 0) (*x) = 0;				
 	if ((*x) > MAX-1) (*x) = MAX-1;
 	// Increase or decrease counting according to the button
-	if (UP)   {_delay_ms(25); (*x)++;}
-	if (DOWN) {_delay_ms(25); (*x)--;}
+	if (UP)        {(*x)++; _delay_ms(250);}
+	else if (DOWN) {(*x)--; _delay_ms(250);}
 }
 void delayms(int n){
 	while(n--)
