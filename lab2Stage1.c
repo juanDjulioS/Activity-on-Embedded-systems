@@ -13,9 +13,9 @@
 int dec7seg[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xB8,0x80,0x90}; 
 // vector to save units, tens, hundreds, and thousands unit of the number
 int digits[4] = {0,0,0,0}; 
-int td = 4;			// time in which each display must be on
-int t_long = 16;	// time in milliseconds that a number should last
-int th_mask, hun_mask, ten_mask;
+int td = 5;			// time in which each display must be on
+int t_long = 20;	// time in milliseconds that a number should last
+int th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B;
 /********************* Functions and subroutines **********************/
 // function to do delay with variables
 void delayms (int n){
@@ -37,7 +37,6 @@ void numFragmenter(int num)
 // function to avoid displaying zeros in front of a digit whose power 
 // of 10 is less(e.g. 0012 ==> 12)
 void redundant_zeros(int d0, int d1, int d2, int d3){
-	int th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B;
 	if (d0== 0 && (d1 >= d0))
 	{
 		th_mask = 0xFF;
@@ -65,7 +64,8 @@ void display(int thousand, int hundred, int ten, int one)
 	delayms(td);		
 	PORTB = 0x07;	
 	PORTD = one;	
-	delayms(td);	
+	delayms(td);
+	th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B; // reset mask
 }
 /************************** Main Program ******************************/		
 int main(void)
