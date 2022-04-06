@@ -15,8 +15,8 @@ int dec7seg[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xB8,0x80,0x90};
 
 // vector to save units, tens, hundreds, and thousands unit of the number
 int digits[] = {0,0,0,0}; 
-int td = 5;						// time in which each display must be on
-int t_long = 100;		// time in milliseconds that a number should last
+int td = 5;			// time in which each display must be on
+int t_long = 100;	// time in milliseconds that a number should last
 
 
 /********************* Functions and subroutines **********************/
@@ -43,9 +43,9 @@ void display(int thousand, int hundred, int ten, int one){
 	}
 	if (digits[3]== 0 && (digits[3] < digits[2])) th_mask = 0xFF;
 	
-	PORTB = 0b11111110 | th_mask;				// enable transistor i-th
-	PORTD = thousand;				// show number
-	delayms(td);					// delay a time td
+	PORTB = 0b11111110 | th_mask;		// enable transistor i-th
+	PORTD = thousand;			// show number
+	delayms(td);				// delay a time td
 	PORTB = 0b11111101 | hun_mask;
 	PORTD = hundred;
 	delayms(td);			
@@ -67,8 +67,8 @@ int main(void)
 	PORTD = 0xFF; // to enable/disable  PNP transistors 2n3906 (active low)
 	DDRB  = 0x0F;
 	PORTB = 0x0F;
-	
-	
+
+
 	while(1)
 	{
 		numFragmenter(count);
