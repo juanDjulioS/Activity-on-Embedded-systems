@@ -1,5 +1,5 @@
 /***********************************************************************
-* a counter from 0 to 9999 ascending using 7 segment display
+* a descending counter from 9999 to 0  using 7 segment display
 *  Micro: Atmega328P
 *  Date: 5-04-2022
 ***********************************************************************/
