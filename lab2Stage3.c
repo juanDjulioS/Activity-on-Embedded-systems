@@ -20,8 +20,8 @@
 int dec7seg[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90};
 // vector to save units, tens, hundreds, and thousands unit of the number
 int digits[4] = {0,0,0,0}; 
-int td = 5;						// time in which each display must be on
-int t_base = 1000;		// time in milliseconds that a number should last
+int td = 5;			// time in which each display must be on
+int t_base = 1000;	// time in milliseconds that a number should last
 int th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B;
 int start_f, stop_f;
 int speed_up_t = 20;
@@ -63,9 +63,9 @@ void redundant_zeros(int d0, int d1, int d2, int d3){
 void display(int thousand, int hundred, int ten, int one)
 {
 	redundant_zeros(digits[0],digits[1],digits[2],digits[3]);
-	PORTB = 0x0E | th_mask;				// enable transistor i-th
-	PORTD = thousand;								// show number
-	delayms(td);								// delay a time td
+	PORTB = 0x0E | th_mask;			// enable transistor i-th
+	PORTD = thousand;				   // show number
+	delayms(td);					// delay a time td
 	PORTB = 0x0D | hun_mask;
 	PORTD = hundred;
 	delayms(td);			
