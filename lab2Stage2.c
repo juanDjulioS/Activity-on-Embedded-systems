@@ -1,12 +1,13 @@
 /***********************************************************************
-* a counter from 0 to 9999 ascending using 7 segment display
+* a descending counter from 9999 to 0 using a four-digit 7 segment
+* display and buttons to START, STOP and RESET the counting.
 *  Micro: Atmega328P
-*  Date: 5-04-2022
+*  Date: 7-04-2022
 ***********************************************************************/
 /***************************** Macros *********************************/
 #define F_CPU 16000000UL // 16 MHz clock speed
 #define START (PINC & (1<<PC5))
-#define RESET (PINC & (1<<PC4))
+#define RESET (PINC & (1<<PC2))
 #define STOP (PINC & (1<<PC3))
 /***************************** Libraries ******************************/
 #include <avr/io.h>
@@ -18,10 +19,10 @@ int dec7seg[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90};
 
 // vector to save units, tens, hundreds, and thousands unit of the number
 int digits[4] = {0,0,0,0}; 
-int td = 5;						// time in which each display must be on
-int t_long = 20;		// time in milliseconds that a number should last
+int td = 5;			// time in which each display must be on
+int t_long = 20;	// time in milliseconds that a number should last
 int th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B;
-int start_f, stop_f, reset_f;
+int start_f, stop_f;
 
 
 
@@ -63,13 +64,12 @@ void redundant_zeros(int d0, int d1, int d2, int d3){
 	}
 }
 
-
 void display(int thousand, int hundred, int ten, int one)
 {
 	redundant_zeros(digits[0],digits[1],digits[2],digits[3]);
-	PORTB = 0x0E | th_mask;				// enable transistor i-th
-	PORTD = thousand;								// show number
-	delayms(td);								// delay a time td
+	PORTB = 0x0E | th_mask;			// enable transistor i-th
+	PORTD = thousand;				// show number
+	delayms(td);				// delay a time td
 	PORTB = 0x0D | hun_mask;
 	PORTD = hundred;
 	delayms(td);			
@@ -93,21 +93,21 @@ int main(void)
 	PORTD = 0xFF; // to enable/disable  PNP transistors 2n3906 (active low)
 	DDRB  = 0x0F;
 	PORTB = 0x0F;
-	DDRC |= 0xC7;
+	DDRC |= 0x11;  //  0b0010001
 	
 	while(1)
 	{
-		if (START) {start_f = 1; stop_f = 1;}
+		if (START) {start_f = 1; stop_f = 0;}
 		if (start_f == 1)
 		{
-			if(count < 0) count = init; // restart the counting
+			if(count < 0 || RESET) count = init; // restart the counting
 			else for(int i=0; i < 4; i++) digits[i] = 0; // reset digits (clear previous value)
 			numFragmenter(count);
 			for(int i=0; i < t_long/(4*td); i++)
 			{
 				display(dec7seg[digits[0]],dec7seg[digits[1]],dec7seg[digits[2]],dec7seg[digits[3]]);
 			}
-			if (STOP) stop_f = 0;
+			if (STOP) stop_f = 1;
 			if (!stop_f) count--;
 		}
 	}
