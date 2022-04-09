@@ -23,8 +23,8 @@ uint8_t dec7seg[10]={0xC0,0xF9,0xA4,0xB0,0x99,0x92,0x82,0xF8,0x80,0x90};
 
 // vector to save units, tens, hundreds, and thousands unit of the number
 uint8_t digits[4]; 
-short td = 5;						// time in which each display must be on
-short t_base = 1000;		// time in milliseconds that a number should last
+short td = 5;			// time in which each display must be on
+short t_base = 1000;	// time in milliseconds that a number should last
 uint8_t th_mask = 0x0E, hun_mask = 0x0D, ten_mask =0x0B;
 uint8_t start_f, stop_f;   // f_ means "flag"
 uint8_t speed_f;
@@ -89,9 +89,9 @@ void debounce_speed_button(uint8_t BUTTON){
 void display(uint8_t thousand, uint8_t hundred, uint8_t ten, uint8_t one)
 {
 	redundant_zeros(digits[0],digits[1],digits[2],digits[3]);
-	PORTB = 0x0E | th_mask;				// enable transistor i-th
-	PORTD = thousand;								// show number
-	delayms(td);								// delay a time td
+	PORTB = 0x0E | th_mask;			// enable transistor i-th
+	PORTD = thousand;			// show number
+	delayms(td);				// delay a time td
 	PORTB = 0x0D | hun_mask;
 	PORTD = hundred;
 	delayms(td);			
